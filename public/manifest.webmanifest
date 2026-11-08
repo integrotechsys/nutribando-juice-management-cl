@@ -1,0 +1,20 @@
+{
+  "name": "NutriBando Juice",
+  "short_name": "NutriBando",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fbf9f7",
+  "theme_color": "#ef4446",
+  "icons": [
+    {
+      "src": "logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

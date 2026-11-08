@@ -1,0 +1,5 @@
+services:
+  - type: web
+    name: nutribando-juice
+    runtime: static
+    staticPublishPath: ./public

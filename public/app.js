@@ -20,7 +20,9 @@ const NAV = [
 const ADMIN_ONLY = NAV.filter((n) => n.admin).map((n) => n.key);
 
 // ---------- login ----------
-function showLogin(msg = '') {
+let loginMsg = '';
+function showLogin(msg = loginMsg) {
+  loginMsg = '';
   nav.innerHTML = ''; who.innerHTML = '';
   app.innerHTML = `<div class="card login"><img src="logo.png" alt="">
     <h2>NutriBando Juice</h2>${msg ? `<p class="neg">${esc(msg)}</p>` : ''}
@@ -45,8 +47,8 @@ function showSetup() {
 async function setSession(session) {
   if (!session) { state.user = null; state.profile = null; return showLogin(); }
   const { data: profile, error } = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
-  if (error || !profile) { await sb.auth.signOut(); return showLogin('Could not load your account. Ask the admin.'); }
-  if (!profile.active) { await sb.auth.signOut(); return showLogin('Your account is switched off. Ask the admin.'); }
+  if (error || !profile) { loginMsg = 'Your account has no profile yet. Admin: run supabase/fix-profiles.sql in Supabase, then log in again.'; await sb.auth.signOut(); return; }
+  if (!profile.active) { loginMsg = 'Your account is switched off. Ask the admin.'; await sb.auth.signOut(); return; }
   state.user = session.user; state.profile = profile;
   try { await loadRefs(); } catch (e) { toast(e.message, 'err'); }
   who.innerHTML = `${esc(profile.full_name)} · ${isAdmin() ? 'Admin' : 'Staff'} <button class="btn ghost sm" id="out">Log out</button>`;

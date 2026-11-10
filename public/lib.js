@@ -4,7 +4,9 @@ export * from './dates.js';
 export { sum } from './forecast.js';
 
 export const configured = !SUPABASE_URL.startsWith('YOUR-') && !SUPABASE_ANON_KEY.startsWith('YOUR-');
-export const sb = configured ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+// Accept the URL even if it was pasted with extra parts (/rest/v1, trailing slash, spaces)
+const cleanUrl = (u) => { try { return new URL(u.trim()).origin; } catch { return u.trim(); } };
+export const sb = configured ? createClient(cleanUrl(SUPABASE_URL), SUPABASE_ANON_KEY.trim()) : null;
 
 export const state = { user: null, profile: null, products: [], sellers: [] };
 export const isAdmin = () => state.profile?.role === 'admin';
